@@ -32,7 +32,6 @@ class Dashboard extends StatelessWidget {
                 child: Container(
                     height: 100,
                     width: 150,
-
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(

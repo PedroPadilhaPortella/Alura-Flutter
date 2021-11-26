@@ -1,8 +1,8 @@
+import 'package:bytebank/database/dao/contact_dao.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:bytebank/screens/contact_form.dart';
 import 'package:bytebank/models/contact.dart';
-import 'package:bytebank/database/app_database.dart';
 
 class ContactList extends StatefulWidget {
   ContactList({Key? key}) : super(key: key);
@@ -12,6 +12,8 @@ class ContactList extends StatefulWidget {
 }
 
 class _ContactListState extends State<ContactList> {
+  final ContactDAO _contactDAO = ContactDAO();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +23,7 @@ class _ContactListState extends State<ContactList> {
       ),
       body: FutureBuilder<List<Contact>>(
         initialData: [],
-        future: findAll(),
+        future: _contactDAO.findAll(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
@@ -66,11 +68,13 @@ class _ContactListState extends State<ContactList> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => ContactForm(),
-            ),
-          ).then((value) => setState(() {}));
+          Navigator.of(context)
+              .push(
+                MaterialPageRoute(
+                  builder: (context) => ContactForm(),
+                ),
+              )
+              .then((value) => setState(() {}));
         },
         backgroundColor: Theme.of(context).primaryColor,
       ),
