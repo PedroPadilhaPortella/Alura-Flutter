@@ -1,6 +1,5 @@
 import 'package:bytebank/database/dao/contact_dao.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:bytebank/screens/contact_form.dart';
 import 'package:bytebank/models/contact.dart';
 
@@ -19,7 +18,7 @@ class _ContactListState extends State<ContactList> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        title: const Text("Contacts"),
+        title: const Text("Transfer"),
       ),
       body: FutureBuilder<List<Contact>>(
         initialData: [],
