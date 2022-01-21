@@ -11,7 +11,7 @@ class ByteBankApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Dashboard(),
+      home: const Dashboard(),
       theme: ThemeData(primaryColor: Colors.green[900]),
     );
   }

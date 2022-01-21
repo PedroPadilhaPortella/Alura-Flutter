@@ -4,7 +4,7 @@ import 'package:bytebank/screens/contact_form.dart';
 import 'package:bytebank/models/contact.dart';
 
 class ContactList extends StatefulWidget {
-  ContactList({Key? key}) : super(key: key);
+  const ContactList({Key? key}) : super(key: key);
 
   @override
   State<ContactList> createState() => _ContactListState();
@@ -21,7 +21,7 @@ class _ContactListState extends State<ContactList> {
         title: const Text("Transfer"),
       ),
       body: FutureBuilder<List<Contact>>(
-        initialData: [],
+        initialData: const [],
         future: _contactDAO.findAll(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
@@ -30,7 +30,7 @@ class _ContactListState extends State<ContactList> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
+                  children: const [
                     CircularProgressIndicator(color: Colors.green),
                     Text("Loading", style: TextStyle(fontSize: 24))
                   ],
@@ -44,12 +44,16 @@ class _ContactListState extends State<ContactList> {
                   return ContactItem(contacts[index]);
                 },
               );
+            case ConnectionState.none:
+              break;
+            case ConnectionState.active:
+              break;
           }
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
+              children: const [
                 Icon(
                   Icons.block_rounded,
                   color: Colors.red,
@@ -65,12 +69,12 @@ class _ContactListState extends State<ContactList> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () {
           Navigator.of(context)
               .push(
                 MaterialPageRoute(
-                  builder: (context) => ContactForm(),
+                  builder: (context) => const ContactForm(),
                 ),
               )
               .then((value) => setState(() {}));
@@ -84,7 +88,7 @@ class _ContactListState extends State<ContactList> {
 class ContactItem extends StatelessWidget {
   final Contact contact;
 
-  ContactItem(this.contact);
+  const ContactItem(this.contact, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -92,11 +96,11 @@ class ContactItem extends StatelessWidget {
       child: ListTile(
         title: Text(
           contact.name,
-          style: TextStyle(fontSize: 22),
+          style: const TextStyle(fontSize: 22),
         ),
         subtitle: Text(
           contact.accountNumber.toString(),
-          style: TextStyle(fontSize: 18),
+          style: const TextStyle(fontSize: 18),
         ),
       ),
     );

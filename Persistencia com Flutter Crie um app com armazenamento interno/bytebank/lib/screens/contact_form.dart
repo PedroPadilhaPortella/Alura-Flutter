@@ -1,7 +1,6 @@
 import 'package:bytebank/database/dao/contact_dao.dart';
 import 'package:bytebank/models/contact.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 class ContactForm extends StatefulWidget {
   const ContactForm({Key? key}) : super(key: key);
@@ -20,7 +19,7 @@ class _ContactFormState extends State<ContactForm> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        title: Text("New Contact"),
+        title: const Text("New Contact"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -29,8 +28,8 @@ class _ContactFormState extends State<ContactForm> {
             TextField(
               controller: _nameController,
               keyboardType: TextInputType.name,
-              style: TextStyle(fontSize: 22),
-              decoration: InputDecoration(
+              style: const TextStyle(fontSize: 22),
+              decoration: const InputDecoration(
                 label: Text("Full Name"),
               ),
             ),
@@ -39,8 +38,8 @@ class _ContactFormState extends State<ContactForm> {
               child: TextField(
                 controller: _accountController,
                 keyboardType: TextInputType.number,
-                style: TextStyle(fontSize: 22),
-                decoration: InputDecoration(
+                style: const TextStyle(fontSize: 22),
+                decoration: const InputDecoration(
                   label: Text("Account Number"),
                 ),
               ),
@@ -51,7 +50,7 @@ class _ContactFormState extends State<ContactForm> {
                 width: double.maxFinite,
                 height: 40,
                 child: ElevatedButton(
-                  child: Text("Create"),
+                  child: const Text("Create"),
                   onPressed: () {
                     final String name = _nameController.text;
                     final int account = int.parse(_accountController.text);
@@ -61,7 +60,7 @@ class _ContactFormState extends State<ContactForm> {
                         .save(newContact)
                         .then((id) => Navigator.pop(context));
                   },
-                  style: ButtonStyle(),
+                  style: const ButtonStyle(),
                 ),
               ),
             )

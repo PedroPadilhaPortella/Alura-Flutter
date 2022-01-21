@@ -27,7 +27,7 @@ class Dashboard extends StatelessWidget {
                   DashboardButton(
                     label: "Transfer",
                     icon: Icons.monetization_on,
-                    onClick: () => ContactList(),
+                    onClick: () => const ContactList(),
                   ),
                   DashboardButton(
                     label: "Transaction Feed",
