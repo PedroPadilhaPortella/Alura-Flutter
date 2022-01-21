@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 class DashboardButton extends StatelessWidget {
   final String label;
   final IconData icon;
-  final Function fn;
+  final Function onClick;
 
-  DashboardButton({required this.label, required this.icon, required this.fn});
+  const DashboardButton(
+      {Key? key,
+      required this.label,
+      required this.icon,
+      required this.onClick})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +22,7 @@ class DashboardButton extends StatelessWidget {
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => fn(),
+                builder: (context) => onClick(),
               ),
             );
           },

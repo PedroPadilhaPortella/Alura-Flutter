@@ -1,6 +1,6 @@
 import 'package:bytebank/components/dashboard_button.dart';
 import 'package:bytebank/screens/contact_list.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:bytebank/screens/transactions_list.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatelessWidget {
@@ -20,19 +20,22 @@ class Dashboard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image.asset('images/bytebank_logo.png'),
-            Row(
-              children: [
-                DashboardButton(
-                  label: "Transfer",
-                  icon: Icons.monetization_on,
-                  fn: () => ContactList(),
-                ),
-                DashboardButton(
-                  label: "Transaction Feed",
-                  icon: Icons.description,
-                  fn: () => ContactList(),
-                ),
-              ],
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  DashboardButton(
+                    label: "Transfer",
+                    icon: Icons.monetization_on,
+                    onClick: () => ContactList(),
+                  ),
+                  DashboardButton(
+                    label: "Transaction Feed",
+                    icon: Icons.description,
+                    onClick: () => TransactionsList(),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
