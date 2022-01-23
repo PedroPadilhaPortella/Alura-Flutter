@@ -1,3 +1,4 @@
+import 'package:bytebank/components/progress.dart';
 import 'package:bytebank/database/dao/contact_dao.dart';
 import 'package:flutter/material.dart';
 import 'package:bytebank/screens/contact_form.dart';
@@ -26,16 +27,7 @@ class _ContactListState extends State<ContactList> {
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    CircularProgressIndicator(color: Colors.green),
-                    Text("Loading", style: TextStyle(fontSize: 24))
-                  ],
-                ),
-              );
+              return const Progress();
             case ConnectionState.done:
               final List<Contact> contacts = snapshot.data as List<Contact>;
               return ListView.builder(
