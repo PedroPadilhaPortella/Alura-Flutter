@@ -1,4 +1,4 @@
-import 'package:bytebank/http/webclient.dart';
+import 'package:bytebank/http/webclients/transaction_webclient.dart';
 import 'package:bytebank/models/contact.dart';
 import 'package:bytebank/models/transaction.dart';
 import 'package:flutter/material.dart';
@@ -6,13 +6,14 @@ import 'package:flutter/material.dart';
 class TransactionForm extends StatefulWidget {
   final Contact contact;
 
-  TransactionForm(this.contact);
+  const TransactionForm(this.contact, {Key? key}) : super(key: key);
 
   @override
   _TransactionFormState createState() => _TransactionFormState();
 }
 
 class _TransactionFormState extends State<TransactionForm> {
+  final TransactionWebClient webClient = TransactionWebClient();
   final TextEditingController _valueController = TextEditingController();
 
   @override
@@ -62,7 +63,9 @@ class _TransactionFormState extends State<TransactionForm> {
                     onPressed: () {
                       final double value = double.parse(_valueController.text);
                       final transaction = Transaction(value, widget.contact);
-                      save(transaction).then((tr) => Navigator.pop(context));
+                      webClient
+                          .save(transaction)
+                          .then((tr) => Navigator.pop(context));
                     },
                   ),
                 ),

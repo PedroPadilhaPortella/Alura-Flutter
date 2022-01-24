@@ -1,10 +1,11 @@
 import 'package:bytebank/components/centered_message.dart';
 import 'package:bytebank/components/progress.dart';
-import 'package:bytebank/http/webclient.dart';
+import 'package:bytebank/http/webclients/transaction_webclient.dart';
 import 'package:bytebank/models/transaction.dart';
 import 'package:flutter/material.dart';
 
 class TransactionsList extends StatelessWidget {
+  final TransactionWebClient webClient = TransactionWebClient();
   TransactionsList({Key? key}) : super(key: key);
 
   @override
@@ -14,7 +15,7 @@ class TransactionsList extends StatelessWidget {
         title: const Text('Transactions'),
       ),
       body: FutureBuilder<List<Transaction>>(
-        future: findAll(),
+        future: webClient.findAll(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
@@ -51,14 +52,14 @@ class TransactionsList extends StatelessWidget {
                   );
                 }
               }
-              return CenteredMessage("No Transaction Found",
+              return const CenteredMessage("No Transaction Found",
                   icon: Icons.warning);
             case ConnectionState.none:
               break;
             case ConnectionState.active:
               break;
           }
-          return CenteredMessage(
+          return const CenteredMessage(
             "Unknown Error",
             icon: Icons.error_outline,
           );
