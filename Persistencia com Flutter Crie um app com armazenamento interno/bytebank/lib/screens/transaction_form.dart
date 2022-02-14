@@ -1,3 +1,4 @@
+import 'package:bytebank/components/transaction_auth_dialog.dart';
 import 'package:bytebank/http/webclients/transaction_webclient.dart';
 import 'package:bytebank/models/contact.dart';
 import 'package:bytebank/models/transaction.dart';
@@ -15,6 +16,15 @@ class TransactionForm extends StatefulWidget {
 class _TransactionFormState extends State<TransactionForm> {
   final TransactionWebClient webClient = TransactionWebClient();
   final TextEditingController _valueController = TextEditingController();
+
+  void _save(
+      Transaction transaction, String password, BuildContext context) async {
+    webClient.save(transaction, password).then((tr) {
+      Navigator.pop(context);
+      Navigator.pop(context);
+      // if (tr != null) {Navigator.pop(context)}
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,9 +73,13 @@ class _TransactionFormState extends State<TransactionForm> {
                     onPressed: () {
                       final double value = double.parse(_valueController.text);
                       final transaction = Transaction(value, widget.contact);
-                      webClient
-                          .save(transaction)
-                          .then((tr) => Navigator.pop(context));
+                      showDialog(
+                          context: context,
+                          builder: (ctxDialog) => TransactionAuthDialog(
+                                onConfirm: (String password) {
+                                  _save(transaction, password, ctxDialog);
+                                },
+                              ));
                     },
                   ),
                 ),
