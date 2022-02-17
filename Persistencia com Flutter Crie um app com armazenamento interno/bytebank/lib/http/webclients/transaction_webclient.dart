@@ -6,9 +6,13 @@ import 'package:bytebank/models/transaction.dart';
 class TransactionWebClient {
   final Uri url = Uri.parse('http://192.168.15.10:8080/transactions');
 
+  static final Map<int, String> _statusCodeResponses = {
+    400: 'there was an error submitting transaction',
+    401: 'authentication failed'
+  };
+
   Future<List<Transaction>> findAll() async {
-    final Response response =
-        await client.get(url).timeout(const Duration(seconds: 5));
+    final Response response = await client.get(url);
 
     final List<dynamic> data = jsonDecode(response.body);
 
@@ -25,8 +29,14 @@ class TransactionWebClient {
         },
         body: transactionJson);
 
-    Map<String, dynamic> json = jsonDecode(response.body);
-    return _toTransaction(json);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> json = jsonDecode(response.body);
+      return _toTransaction(json);
+    }
+
+    // _throwHttpError(response.statusCode);
+    throw HttpException(_statusCodeResponses[response.statusCode]);
+    return _toTransaction(jsonDecode(response.body));
   }
 
   Transaction _toTransaction(Map<String, dynamic> json) {
@@ -38,4 +48,13 @@ class TransactionWebClient {
         .map((dynamic element) => Transaction.fromJson(element))
         .toList();
   }
+
+  // void _throwHttpError(int statusCode) =>
+  //     throw Exception(_statusCodeResponses[statusCode]);
+}
+
+class HttpException implements Exception {
+  final String? message;
+
+  HttpException(this.message);
 }

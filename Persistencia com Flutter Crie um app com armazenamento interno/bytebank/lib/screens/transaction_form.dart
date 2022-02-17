@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:bytebank/components/response_dialog.dart';
 import 'package:bytebank/components/transaction_auth_dialog.dart';
 import 'package:bytebank/http/webclients/transaction_webclient.dart';
 import 'package:bytebank/models/contact.dart';
@@ -17,13 +20,42 @@ class _TransactionFormState extends State<TransactionForm> {
   final TransactionWebClient webClient = TransactionWebClient();
   final TextEditingController _valueController = TextEditingController();
 
-  void _save(
-      Transaction transaction, String password, BuildContext context) async {
-    webClient.save(transaction, password).then((tr) {
+  void _save(Transaction tr, String password, BuildContext context) async {
+    Transaction transaction = await _send(tr, password, context);
+    _showSuccessfulMessage(transaction, context);
+  }
+
+  Future<void> _showSuccessfulMessage(
+      Transaction transaction, BuildContext context) async {
+    if (transaction != null) {
+      await showDialog(
+          context: context,
+          builder: (contextDialog) {
+            return const SuccessDialog('successful transaction');
+          });
       Navigator.pop(context);
-      Navigator.pop(context);
-      // if (tr != null) {Navigator.pop(context)}
-    });
+    }
+  }
+
+  Future<Transaction> _send(
+      Transaction tr, String password, BuildContext context) async {
+    final Transaction transaction =
+        await webClient.save(tr, password).catchError((e) {
+      _showFailureMessage(context, e.message);
+    }, test: (e) => e is HttpException).catchError((e) {
+      _showFailureMessage(context, "Timeout exception");
+    }, test: (e) => e is TimeoutException).catchError((e) {
+      _showFailureMessage(context, "Unknown Error");
+    }, test: (e) => e is Exception);
+    return transaction;
+  }
+
+  void _showFailureMessage(BuildContext context, String message) {
+    showDialog(
+        context: context,
+        builder: (contextDialog) {
+          return FailureDialog(message);
+        });
   }
 
   @override
@@ -78,6 +110,7 @@ class _TransactionFormState extends State<TransactionForm> {
                           builder: (ctxDialog) => TransactionAuthDialog(
                                 onConfirm: (String password) {
                                   _save(transaction, password, ctxDialog);
+                                  Navigator.pop(context);
                                 },
                               ));
                     },

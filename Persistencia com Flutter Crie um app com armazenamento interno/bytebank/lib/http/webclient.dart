@@ -4,4 +4,5 @@ import 'interceptors/logging_interceptor.dart';
 
 Client client = InterceptedClient.build(
   interceptors: [LoggingInterceptor()],
+  requestTimeout: const Duration(seconds: 5),
 );
