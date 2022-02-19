@@ -36,7 +36,6 @@ class TransactionWebClient {
 
     // _throwHttpError(response.statusCode);
     throw HttpException(_statusCodeResponses[response.statusCode]);
-    return _toTransaction(jsonDecode(response.body));
   }
 
   Transaction _toTransaction(Map<String, dynamic> json) {

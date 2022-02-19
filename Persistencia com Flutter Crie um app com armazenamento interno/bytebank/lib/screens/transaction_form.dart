@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:bytebank/components/progress.dart';
 import 'package:bytebank/components/response_dialog.dart';
 import 'package:bytebank/components/transaction_auth_dialog.dart';
 import 'package:bytebank/http/webclients/transaction_webclient.dart';
 import 'package:bytebank/models/contact.dart';
 import 'package:bytebank/models/transaction.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class TransactionForm extends StatefulWidget {
   final Contact contact;
@@ -19,6 +21,9 @@ class TransactionForm extends StatefulWidget {
 class _TransactionFormState extends State<TransactionForm> {
   final TransactionWebClient webClient = TransactionWebClient();
   final TextEditingController _valueController = TextEditingController();
+  final String transactionId = const Uuid().v4();
+
+  bool _isSending = false;
 
   void _save(Transaction tr, String password, BuildContext context) async {
     Transaction transaction = await _send(tr, password, context);
@@ -27,26 +32,27 @@ class _TransactionFormState extends State<TransactionForm> {
 
   Future<void> _showSuccessfulMessage(
       Transaction transaction, BuildContext context) async {
-    if (transaction != null) {
-      await showDialog(
-          context: context,
-          builder: (contextDialog) {
-            return const SuccessDialog('successful transaction');
-          });
-      Navigator.pop(context);
-    }
+    await showDialog(
+        context: context,
+        builder: (contextDialog) {
+          return const SuccessDialog('successful transaction');
+        });
+    Navigator.pop(context);
   }
 
   Future<Transaction> _send(
       Transaction tr, String password, BuildContext context) async {
-    final Transaction transaction =
-        await webClient.save(tr, password).catchError((e) {
+    setState(() => _isSending = true);
+    final Transaction transaction = await webClient
+        .save(tr, password)
+        .catchError((e) {
       _showFailureMessage(context, e.message);
     }, test: (e) => e is HttpException).catchError((e) {
       _showFailureMessage(context, "Timeout exception");
     }, test: (e) => e is TimeoutException).catchError((e) {
       _showFailureMessage(context, "Unknown Error");
-    }, test: (e) => e is Exception);
+    }, test: (e) => e is Exception).whenComplete(
+            () => setState(() => _isSending = false));
     return transaction;
   }
 
@@ -70,6 +76,12 @@ class _TransactionFormState extends State<TransactionForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              Visibility(
+                visible: _isSending,
+                child: const Progress(
+                  message: "Sending Transfer...",
+                ),
+              ),
               Text(
                 widget.contact.name,
                 style: const TextStyle(
@@ -104,7 +116,8 @@ class _TransactionFormState extends State<TransactionForm> {
                     child: const Text('Transfer'),
                     onPressed: () {
                       final double value = double.parse(_valueController.text);
-                      final transaction = Transaction(value, widget.contact);
+                      final transaction =
+                          Transaction(transactionId, value, widget.contact);
                       showDialog(
                           context: context,
                           builder: (ctxDialog) => TransactionAuthDialog(
