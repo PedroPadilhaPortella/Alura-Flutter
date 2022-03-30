@@ -3,13 +3,19 @@ import 'package:bytebank/screens/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(
-      ChangeNotifierProvider(
-        child: BytebankApp(),
-        create: (_) => Saldo(valor: 0),
-      ),
-    );
-// void main() => runApp(BytebankApp());
+import 'models/transferencias.dart';
+
+void main() => runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => Saldo(0),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => Transferencias(),
+        ),
+      ],
+      child: BytebankApp(),
+    ));
 
 class BytebankApp extends StatelessWidget {
   @override
@@ -17,12 +23,11 @@ class BytebankApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         primaryColor: Colors.green[900],
+        accentColor: Colors.blueAccent[700],
         buttonTheme: ButtonThemeData(
           buttonColor: Colors.blueAccent[700],
           textTheme: ButtonTextTheme.primary,
         ),
-        colorScheme: ColorScheme.fromSwatch()
-            .copyWith(secondary: Colors.blueAccent[700]),
       ),
       home: Dashboard(),
     );
