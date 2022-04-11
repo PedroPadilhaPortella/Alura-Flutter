@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'components/theme.dart';
-import 'screens/counter_page.dart';
-import 'screens/dashboard.dart';
+import 'screens/name.dart';
+
+class LogObserver extends BlocObserver {
+  @override
+  void onChange(BlocBase bloc, Change change) {
+    debugPrint('${bloc.runtimeType} > $change');
+    super.onChange(bloc, change);
+  }
+}
 
 void main() {
-  runApp(const ByteBankApp());
+  BlocOverrides.runZoned(
+    () {
+      runApp(const ByteBankApp());
+    },
+    blocObserver: LogObserver(),
+  );
 }
 
 class ByteBankApp extends StatelessWidget {
@@ -13,7 +26,7 @@ class ByteBankApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: CounterContainer(),
+      home: const NameContainer(),
       theme: ByteBankTheme,
     );
   }
