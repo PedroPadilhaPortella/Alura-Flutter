@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'components/theme.dart';
+import 'screens/counter_page.dart';
 import 'screens/dashboard.dart';
 
 void main() {
@@ -11,8 +13,8 @@ class ByteBankApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const Dashboard(),
-      theme: ThemeData(primaryColor: Colors.green[900]),
+      home: CounterContainer(),
+      theme: ByteBankTheme,
     );
   }
 }
