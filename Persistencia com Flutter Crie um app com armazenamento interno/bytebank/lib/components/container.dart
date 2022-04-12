@@ -7,10 +7,6 @@ abstract class BlocContainer extends StatelessWidget {
 }
 
 void push(BuildContext blocContext, Function onClick) {
-  // Navigator.of(blocContext).push(
-  //   MaterialPageRoute(builder: (context) => container),
-  // );
-
   Navigator.of(blocContext).push(
     MaterialPageRoute(
       builder: (ctx) => BlocProvider.value(

@@ -15,14 +15,6 @@ class DashboardButton extends StatelessWidget {
 
   void navigateTo(BuildContext context) {
     push(context, onClick);
-    // Navigator.of(context).push(
-    //   MaterialPageRoute(
-    //     builder: (ctx) => BlocProvider.value(
-    //       value: BlocProvider.of<NameCubit>(context),
-    //       child: onClick(),
-    //     ),
-    //   ),
-    // );
   }
 
   @override
