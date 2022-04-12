@@ -1,8 +1,9 @@
+import 'package:bytebank/components/container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Exemplo de Contador usando Bloc
-class CounterContainer extends StatelessWidget {
+class CounterContainer extends BlocContainer {
   const CounterContainer({Key? key}) : super(key: key);
 
   @override

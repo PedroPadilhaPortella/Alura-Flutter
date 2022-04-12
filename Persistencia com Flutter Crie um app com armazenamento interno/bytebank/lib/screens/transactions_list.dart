@@ -12,8 +12,8 @@ class TransactionsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Transactions'),
-      ),
+          title: const Text('Transactions'),
+          backgroundColor: Theme.of(context).primaryColor),
       body: FutureBuilder<List<Transaction>>(
         future: webClient.findAll(),
         builder: (context, snapshot) {

@@ -1,21 +1,15 @@
+import 'package:bytebank/components/container.dart';
+import 'package:bytebank/models/name.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class NameContainer extends StatelessWidget {
+class NameContainer extends BlocContainer {
   const NameContainer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => NameCubit('Usuário'),
-      child: NameView(),
-    );
+    return NameView();
   }
-}
-
-class NameCubit extends Cubit<String> {
-  NameCubit(String name) : super(name);
-  change(String name) => emit(name);
 }
 
 class NameView extends StatelessWidget {
@@ -26,8 +20,11 @@ class NameView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _nameController.text = context.read<NameCubit>().state;
+
     return Scaffold(
-      appBar: AppBar(title: const Text("Change Name")),
+      appBar: AppBar(
+          title: const Text("Change Name"),
+          backgroundColor: Theme.of(context).primaryColor),
       body: Column(
         children: [
           TextField(

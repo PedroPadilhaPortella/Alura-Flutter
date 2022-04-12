@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'components/theme.dart';
-import 'screens/name.dart';
+import 'screens/dashboard.dart';
 
 class LogObserver extends BlocObserver {
   @override
@@ -13,9 +13,7 @@ class LogObserver extends BlocObserver {
 
 void main() {
   BlocOverrides.runZoned(
-    () {
-      runApp(const ByteBankApp());
-    },
+    () => runApp(const ByteBankApp()),
     blocObserver: LogObserver(),
   );
 }
@@ -26,7 +24,7 @@ class ByteBankApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const NameContainer(),
+      home: const DashboardContainer(),
       theme: ByteBankTheme,
     );
   }

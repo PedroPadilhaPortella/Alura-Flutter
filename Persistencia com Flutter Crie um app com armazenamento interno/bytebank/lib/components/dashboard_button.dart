@@ -1,3 +1,4 @@
+import 'package:bytebank/components/container.dart';
 import 'package:flutter/material.dart';
 
 class DashboardButton extends StatelessWidget {
@@ -12,6 +13,18 @@ class DashboardButton extends StatelessWidget {
       required this.onClick})
       : super(key: key);
 
+  void navigateTo(BuildContext context) {
+    push(context, onClick);
+    // Navigator.of(context).push(
+    //   MaterialPageRoute(
+    //     builder: (ctx) => BlocProvider.value(
+    //       value: BlocProvider.of<NameCubit>(context),
+    //       child: onClick(),
+    //     ),
+    //   ),
+    // );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -20,11 +33,7 @@ class DashboardButton extends StatelessWidget {
         color: Theme.of(context).primaryColor,
         child: InkWell(
           onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => onClick(),
-              ),
-            );
+            navigateTo(context);
           },
           child: SizedBox(
               height: 100,
@@ -40,10 +49,9 @@ class DashboardButton extends StatelessWidget {
                       color: Colors.white,
                       size: 24,
                     ),
-                    Text(
-                      label,
-                      style: const TextStyle(color: Colors.white, fontSize: 18),
-                    ),
+                    Text(label,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 18)),
                   ],
                 ),
               )),
