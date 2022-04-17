@@ -103,9 +103,11 @@ class ContactList extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return ContactItem(
                     contacts[index],
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            TransactionForm(contacts[index]))),
+                    onTap: () => push(context,
+                        () => TransactionFormContainer(contacts[index])),
+                    // onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    //     builder: (context) =>
+                    //         TransactionFormContainer(contacts[index]))),
                   );
                 },
               );
