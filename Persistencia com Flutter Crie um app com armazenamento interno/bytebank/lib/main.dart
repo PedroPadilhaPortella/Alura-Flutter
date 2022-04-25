@@ -1,3 +1,4 @@
+import 'package:bytebank/components/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'components/theme.dart';
@@ -24,7 +25,9 @@ class ByteBankApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const DashboardContainer(),
+      home: const LocalizationContainer(
+        child: DashboardContainer(),
+      ),
       theme: ByteBankTheme,
     );
   }
