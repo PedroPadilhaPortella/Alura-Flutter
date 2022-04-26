@@ -16,8 +16,8 @@ class DashboardContainer extends BlocContainer {
     return BlocProvider(
       create: (_) => NameCubit('Usuário'),
       child: I18NLoadingContainer(
-        creator: (I18NMessages messages) =>
-            DashboardView(DashboardViewLazyI18N(messages)),
+        viewKey: 'dashboard',
+        creator: (messages) => DashboardView(DashboardViewLazyI18N(messages)),
       ),
     );
   }
