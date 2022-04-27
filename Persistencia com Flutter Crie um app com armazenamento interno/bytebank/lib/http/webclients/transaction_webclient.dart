@@ -34,7 +34,6 @@ class TransactionWebClient {
       return _toTransaction(json);
     }
 
-    // _throwHttpError(response.statusCode);
     throw HttpException(_statusCodeResponses[response.statusCode]);
   }
 
@@ -47,9 +46,6 @@ class TransactionWebClient {
         .map((dynamic element) => Transaction.fromJson(element))
         .toList();
   }
-
-  // void _throwHttpError(int statusCode) =>
-  //     throw Exception(_statusCodeResponses[statusCode]);
 }
 
 class HttpException implements Exception {

@@ -1,6 +1,6 @@
 import 'package:bytebank/components/contact_item.dart';
 import 'package:bytebank/components/container.dart';
-import 'package:bytebank/components/progress.dart';
+import 'package:bytebank/components/progress/progress.dart';
 import 'package:bytebank/database/dao/contact_dao.dart';
 import 'package:bytebank/screens/transaction_form.dart';
 import 'package:flutter/material.dart';
@@ -72,7 +72,7 @@ class ContactList extends StatelessWidget {
       onPressed: () async {
         await Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const ContactForm()),
-        ); // .then((value) => setState(() {}));
+        );
         update(context);
       },
       backgroundColor: Theme.of(context).primaryColor,
@@ -105,9 +105,6 @@ class ContactList extends StatelessWidget {
                     contacts[index],
                     onTap: () => push(context,
                         () => TransactionFormContainer(contacts[index])),
-                    // onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    //     builder: (context) =>
-                    //         TransactionFormContainer(contacts[index]))),
                   );
                 },
               );

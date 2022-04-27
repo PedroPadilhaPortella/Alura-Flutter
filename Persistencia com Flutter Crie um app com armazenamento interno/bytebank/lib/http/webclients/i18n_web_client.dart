@@ -11,7 +11,6 @@ class I18NWebClient {
   I18NWebClient(this.viewKey);
 
   Future<Map<String, dynamic>> findAll() async {
-    print('chamou api');
     final Uri uri = Uri.parse('$url/$viewKey.json');
     final Response response = await client.get(uri);
     final Map<String, dynamic> data = jsonDecode(response.body);

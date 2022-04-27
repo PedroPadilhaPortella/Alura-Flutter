@@ -1,8 +1,8 @@
-import 'package:bytebank/components/localization.dart';
+import 'package:bytebank/components/localization/locale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'components/theme.dart';
-import 'screens/dashboard.dart';
+import 'screens/dashboard/dashboard_container.dart';
 
 class LogObserver extends BlocObserver {
   @override
