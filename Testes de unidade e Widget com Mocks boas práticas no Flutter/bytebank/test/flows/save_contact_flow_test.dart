@@ -1,5 +1,6 @@
 import 'package:bytebank/database/dao/contact_dao.dart';
 import 'package:bytebank/main.dart';
+import 'package:bytebank/models/contact.dart';
 import 'package:bytebank/screens/contact_form.dart';
 import 'package:bytebank/screens/contact_list.dart';
 import 'package:bytebank/screens/dashboard.dart';
@@ -9,16 +10,24 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import 'save_contact_flow_test.mocks.dart';
-import 'utils/matchers.dart';
+import '../utils/matchers.dart';
 
 @GenerateMocks([ContactDAO])
 void main() {
+  late MockContactDAO contactDaoMock;
+
+  setUp(() async {
+    contactDaoMock = MockContactDAO();
+  });
+
   testWidgets('should save a contact', (tester) async {
-    // Criando Mock da Lista de Contatos
-    final contactDaoMock = MockContactDAO();
+    // Criando Mock da Lista de Contatos e Stubs
+    const name = 'Anonimo';
+    const account = 9090;
+    final contact = Contact(id: 0, name: name, accountNumber: account);
 
     when(contactDaoMock.findAll()).thenAnswer((_) async => []);
-    when(contactDaoMock.save(any)).thenAnswer((_) async => 1);
+    when(contactDaoMock.save(contact)).thenAnswer((_) async => 1);
 
     // Instanciando Widget Inicial
     await tester.pumpWidget(ByteBankApp(contactDAO: contactDaoMock));
@@ -34,6 +43,9 @@ void main() {
 
     await tester.tap(transferDashboardButton);
     await tester.pumpAndSettle();
+
+    // Checando se o metodo findAll() foi chamado
+    verify(contactDaoMock.findAll()).called(1);
 
     // Checando se existe a Lista de Contatos
     final contactList = find.byType(ContactList);
@@ -64,13 +76,19 @@ void main() {
     expect(createRaisedButton, findsOneWidget);
 
     // Preenchendo os textFields e clicando no botão de Create
-    await tester.enterText(nameTextField, 'Anonimo');
-    await tester.enterText(accountNumberTextField, '9090');
+    await tester.enterText(nameTextField, name);
+    await tester.enterText(accountNumberTextField, account.toString());
     await tester.tap(createRaisedButton);
     await tester.pumpAndSettle();
+
+    // Checando se o metodo save(contact) foi chamado
+    verify(contactDaoMock.save(contact));
 
     // Checando se voltou para a tela de Lista de Contatos
     final contactListBack = find.byType(ContactList);
     expect(contactListBack, findsOneWidget);
+
+    // Checando se o metodo findAll() foi chamado
+    verify(contactDaoMock.findAll()).called(1);
   });
 }
