@@ -5,11 +5,15 @@ class Transaction {
   final double value;
   final Contact contact;
 
-  Transaction(this.id, this.value, this.contact);
+  Transaction(this.id, this.value, this.contact) {
+    if (value < 0) {
+      throw AssertionError('The value must be a positive number');
+    }
+  }
 
   @override
   String toString() {
-    return 'Transaction{value: $value, contact: $contact}';
+    return 'Transaction {value: $value, contact: $contact}';
   }
 
   Transaction.fromJson(Map<String, dynamic> json)
