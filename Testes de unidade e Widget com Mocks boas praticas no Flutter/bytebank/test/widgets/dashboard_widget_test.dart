@@ -4,16 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../utils/matchers.dart';
-import '../utils/mocks.dart';
 
 void main() {
   group('When Dashboard is opened', () {
     testWidgets('Should display the Bytebank Image',
         (WidgetTester tester) async {
-      final contactDaoMock = ContactDAOMock();
+      // final contactDaoMock = ContactDAOMock();
 
-      await tester
-          .pumpWidget(MaterialApp(home: Dashboard(contactDAO: contactDaoMock)));
+      await tester.pumpWidget(const MaterialApp(home: Dashboard()));
 
       final mainImage = find.byType(Image);
 
@@ -21,10 +19,9 @@ void main() {
     });
 
     testWidgets('Should display the Transfer button', (tester) async {
-      final contactDaoMock = ContactDAOMock();
+      // final contactDaoMock = ContactDAOMock();
 
-      await tester
-          .pumpWidget(MaterialApp(home: Dashboard(contactDAO: contactDaoMock)));
+      await tester.pumpWidget(const MaterialApp(home: Dashboard()));
 
       final transferText = find.widgetWithText(DashboardButton, 'Transfer');
 
@@ -36,10 +33,9 @@ void main() {
     });
 
     testWidgets('Should display the Transaction Feed button', (tester) async {
-      final contactDaoMock = ContactDAOMock();
+      // final contactDaoMock = ContactDAOMock();
 
-      await tester
-          .pumpWidget(MaterialApp(home: Dashboard(contactDAO: contactDaoMock)));
+      await tester.pumpWidget(const MaterialApp(home: Dashboard()));
 
       final transactionFeedText =
           find.widgetWithText(DashboardButton, 'Transaction Feed');
@@ -52,9 +48,8 @@ void main() {
     });
 
     testWidgets("Should display the Dashboard's Buttons", (tester) async {
-      final contactDaoMock = ContactDAOMock();
-      await tester
-          .pumpWidget(MaterialApp(home: Dashboard(contactDAO: contactDaoMock)));
+      // final contactDaoMock = ContactDAOMock();
+      await tester.pumpWidget(const MaterialApp(home: Dashboard()));
 
       final transferDashboardButton = find.byWidgetPredicate((widget) =>
           dashboardButtonMatcher(widget, 'Transfer', Icons.monetization_on));

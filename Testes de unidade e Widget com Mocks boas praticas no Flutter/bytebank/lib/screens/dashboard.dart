@@ -1,13 +1,10 @@
 import 'package:bytebank/components/dashboard_button.dart';
-import 'package:bytebank/database/dao/contact_dao.dart';
 import 'package:bytebank/screens/contact_list.dart';
 import 'package:bytebank/screens/transactions_list.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatelessWidget {
-  final ContactDAO contactDAO;
-
-  const Dashboard({Key? key, required this.contactDAO}) : super(key: key);
+  const Dashboard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +33,7 @@ class Dashboard extends StatelessWidget {
                         DashboardButton(
                           label: "Transfer",
                           icon: Icons.monetization_on,
-                          onClick: () => ContactList(contactDAO: contactDAO),
+                          onClick: () => const ContactList(),
                         ),
                         DashboardButton(
                           label: "Transaction Feed",

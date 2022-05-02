@@ -6,6 +6,7 @@ import 'package:bytebank/components/transaction_auth_dialog.dart';
 import 'package:bytebank/http/webclients/transaction_webclient.dart';
 import 'package:bytebank/models/contact.dart';
 import 'package:bytebank/models/transaction.dart';
+import 'package:bytebank/widgets/app_dependecies.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -19,14 +20,14 @@ class TransactionForm extends StatefulWidget {
 }
 
 class _TransactionFormState extends State<TransactionForm> {
-  final TransactionWebClient webClient = TransactionWebClient();
   final TextEditingController _valueController = TextEditingController();
   final String transactionId = const Uuid().v4();
 
   bool _isSending = false;
 
-  void _save(Transaction tr, String password, BuildContext context) async {
-    Transaction transaction = await _send(tr, password, context);
+  void _save(Transaction tr, String password, BuildContext context,
+      TransactionWebClient webClient) async {
+    Transaction transaction = await _send(webClient, tr, password, context);
     _showSuccessfulMessage(transaction, context);
   }
 
@@ -40,8 +41,8 @@ class _TransactionFormState extends State<TransactionForm> {
     Navigator.pop(context);
   }
 
-  Future<Transaction> _send(
-      Transaction tr, String password, BuildContext context) async {
+  Future<Transaction> _send(TransactionWebClient webClient, Transaction tr,
+      String password, BuildContext context) async {
     setState(() => _isSending = true);
     final Transaction transaction = await webClient
         .save(tr, password)
@@ -66,6 +67,8 @@ class _TransactionFormState extends State<TransactionForm> {
 
   @override
   Widget build(BuildContext context) {
+    final dependencies = AppDependencies.of(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('New transaction'),
@@ -122,7 +125,8 @@ class _TransactionFormState extends State<TransactionForm> {
                           context: context,
                           builder: (ctxDialog) => TransactionAuthDialog(
                                 onConfirm: (String password) {
-                                  _save(transaction, password, ctxDialog);
+                                  _save(transaction, password, ctxDialog,
+                                      dependencies.webClient);
                                   Navigator.pop(context);
                                 },
                               ));

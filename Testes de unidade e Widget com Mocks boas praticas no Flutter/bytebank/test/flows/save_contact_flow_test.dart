@@ -1,4 +1,5 @@
 import 'package:bytebank/database/dao/contact_dao.dart';
+import 'package:bytebank/http/webclients/transaction_webclient.dart';
 import 'package:bytebank/main.dart';
 import 'package:bytebank/models/contact.dart';
 import 'package:bytebank/screens/contact_form.dart';
@@ -13,11 +14,14 @@ import 'save_contact_flow_test.mocks.dart';
 import '../utils/matchers.dart';
 
 @GenerateMocks([ContactDAO])
+@GenerateMocks([TransactionWebClient])
 void main() {
   late MockContactDAO contactDaoMock;
+  late MockTransactionWebClient transactionWebClientMock;
 
   setUp(() async {
     contactDaoMock = MockContactDAO();
+    transactionWebClientMock = MockTransactionWebClient();
   });
 
   testWidgets('should save a contact', (tester) async {
@@ -30,7 +34,10 @@ void main() {
     when(contactDaoMock.save(contact)).thenAnswer((_) async => 1);
 
     // Instanciando Widget Inicial
-    await tester.pumpWidget(ByteBankApp(contactDAO: contactDaoMock));
+    await tester.pumpWidget(ByteBankApp(
+      contactDAO: contactDaoMock,
+      webClient: transactionWebClientMock,
+    ));
 
     // Checando se existe o dashboard
     final dashboard = find.byType(Dashboard);
