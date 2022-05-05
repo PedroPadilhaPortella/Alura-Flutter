@@ -11,6 +11,10 @@ import 'package:proj/models/producer_model.dart';
 import 'package:proj/repository/data.dart';
 
 class HomeScreen extends StatefulWidget {
+  final Function onProducerDetailsClick;
+
+  HomeScreen({this.onProducerDetailsClick});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -140,8 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
       final prod = Producer.fromJson(producers[producer]);
 
       children.add(OrgsStoresCard(
-        action: () =>
-            Navigator.pushNamed(context, 'producer-details', arguments: prod),
+        action: () => widget.onProducerDetailsClick({'producer': prod}),
         img: prod.logo,
         distance: prod.distance,
         title: prod.name,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:proj/core/app_colors.dart';
-import 'package:proj/models/package_model.dart';
 import 'package:proj/models/producer_model.dart';
 import 'package:proj/screens/favorites_screen.dart';
 import 'package:proj/screens/home_screen.dart';

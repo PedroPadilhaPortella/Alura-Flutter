@@ -7,7 +7,9 @@ import 'package:proj/models/producer_model.dart';
 
 class ProducerDetailsScreen extends StatelessWidget {
   final Producer producer;
-  ProducerDetailsScreen({@required this.producer});
+  final Function onPackageDetailsClick;
+
+  ProducerDetailsScreen({@required this.producer, this.onPackageDetailsClick});
 
   @override
   Widget build(BuildContext context) {
@@ -96,8 +98,8 @@ class ProducerDetailsScreen extends StatelessWidget {
       final pack = Package.fromJson(package);
 
       children.add(InkWell(
-        onTap: () => Navigator.pushNamed(context, 'package-details',
-            arguments: {'producer': producer, 'package': pack}),
+        onTap: () =>
+            onPackageDetailsClick({'package': pack, 'producer': producer}),
         child: OrgsPackagesCard(
           title: pack.title,
           price: pack.price,
