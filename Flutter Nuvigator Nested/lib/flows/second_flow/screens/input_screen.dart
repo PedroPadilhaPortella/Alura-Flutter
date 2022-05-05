@@ -20,7 +20,7 @@ class InputScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Digite o seu nome e roque no botão para mudar de página',
+              'Digite o seu nome e toque no botão para mudar de página',
             ),
             TextField(
               controller: controller,
