@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class Item extends StatelessWidget {
   final String _valor;
-  late String _conta;
-  late String _tipo;
+  late final String _conta;
+  late final String _tipo;
 
   final Map<String, Color> _cores = {
     'debito': Colors.red,

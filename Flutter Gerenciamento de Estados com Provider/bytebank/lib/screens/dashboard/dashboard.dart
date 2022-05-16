@@ -1,3 +1,4 @@
+import 'package:bytebank/screens/autenticacao/login.dart';
 import 'package:bytebank/screens/dashboard/saldo.dart';
 import 'package:bytebank/screens/deposito/formulario.dart';
 import 'package:bytebank/screens/extrato/ultimas.dart';
@@ -9,6 +10,18 @@ class Dashboard extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Bytebank'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => Login()),
+                (route) => false,
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         children: <Widget>[
@@ -33,7 +46,6 @@ class Dashboard extends StatelessWidget {
                   );
                 },
               ),
-
               ElevatedButton(
                 child: Text('Nova Transferência'),
                 style: ElevatedButton.styleFrom(
@@ -50,7 +62,7 @@ class Dashboard extends StatelessWidget {
               )
             ],
           ),
-          UltimasTransferencias()
+          UltimasTransferencias(),
         ],
       ),
     );
