@@ -49,13 +49,16 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Dev meetups',
       home: EventsScreen(),
+      navigatorKey: navigatorKey,
     );
   }
 }
 
 void _startPushNotificationHandler(FirebaseMessaging messaging) async {
   //Obter token do dispositivo
-  String? token = await messaging.getToken();
+  String? token = await messaging.getToken(
+      vapidKey:
+          'BJb23_NXZP_xj2V1DKcX_xES6KJRdZUkUpTYB_pmEsJfhTsWsebGTH6lmVwDwoTtFc_eKF8Llz2PlltSKdc5XC4');
   _setPushToken(token!);
 
   //Mensagem em Foreground
@@ -73,9 +76,11 @@ void _startPushNotificationHandler(FirebaseMessaging messaging) async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   // Mensagem que inicializa o app
-  var data = await FirebaseMessaging.instance.getInitialMessage();
+  var notification = await FirebaseMessaging.instance.getInitialMessage();
 
-  if (data!.data["message"].length > 0) showMyDialog(data.data["message"]);
+  // if (notification!.data["message"].length > 0) {
+  showMyDialog(notification?.data["message"]);
+  // }
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -124,23 +129,18 @@ void _setPushToken(String token) async {
 }
 
 void showMyDialog(String message) {
-  Widget okButton = OutlinedButton(
-    onPressed: () => Navigator.pop(navigatorKey.currentContext!),
-    child: Text('Ok'),
-  );
-
-  AlertDialog alerta = AlertDialog(
-    title: Text("Promoção Imperdivel"),
-    content: Text(message),
-    actions: [
-      okButton,
-    ],
-  );
-
+  print('showMyDialog: $message');
   showDialog(
     context: navigatorKey.currentContext!,
-    builder: (BuildContext context) {
-      return alerta;
-    },
+    builder: (BuildContext context) => AlertDialog(
+      title: Text("Você recebeu uma mensagem"),
+      content: Text(message),
+      actions: [
+        OutlinedButton(
+          onPressed: () => Navigator.pop(navigatorKey.currentContext!),
+          child: Text('Ok'),
+        ),
+      ],
+    ),
   );
 }

@@ -1,7 +1,9 @@
 import 'package:brasil_fields/brasil_fields.dart';
+import 'package:bytebank/models/cliente.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import '../dashboard/dashboard.dart';
 
@@ -50,8 +52,29 @@ class RegisterForm extends StatelessWidget {
   }
 
   bool _confirmPassword(String confirmPassword) {
-    print(confirmPassword == _senhaController.text);
     return confirmPassword == _senhaController.text;
+  }
+
+  void _salvar(context) {
+    Provider.of<Cliente>(context, listen: false).nome = _nomeController.text;
+    Provider.of<Cliente>(context, listen: false).email = _emailController.text;
+    Provider.of<Cliente>(context, listen: false).cpf = _cpfController.text;
+    Provider.of<Cliente>(context, listen: false).bairro =
+        _bairroController.text;
+    Provider.of<Cliente>(context, listen: false).cep = _cepController.text;
+    Provider.of<Cliente>(context, listen: false).cidade =
+        _cidadeController.text;
+    Provider.of<Cliente>(context, listen: false).telefone =
+        _telefoneController.text;
+    Provider.of<Cliente>(context, listen: false).dataNascimento =
+        _nascimentoController.text;
+    Provider.of<Cliente>(context, listen: false).estado =
+        _estadoController.text;
+    Provider.of<Cliente>(context, listen: false).logradouro =
+        _logradouroController.text;
+    Provider.of<Cliente>(context, listen: false).numero =
+        _numeroController.text;
+    Provider.of<Cliente>(context, listen: false).senha = _senhaController.text;
   }
 
   @override
@@ -125,7 +148,6 @@ class RegisterForm extends StatelessWidget {
                   ],
                   maxLength: 14,
                   validator: (value) {
-                    print(value);
                     if (!_validateTelefone(value!)) {
                       return "Telefone inválido";
                     }
@@ -157,7 +179,6 @@ class RegisterForm extends StatelessWidget {
                   ],
                   maxLength: 10,
                   validator: (value) {
-                    print(value);
                     if (!_validateCEP(value!)) {
                       return "CEP inválido";
                     }
@@ -251,16 +272,22 @@ class RegisterForm extends StatelessWidget {
                     return null;
                   },
                 ),
-                OutlineButton(
-                  textColor: Theme.of(context).accentColor,
-                  highlightColor: Color.fromRGBO(71, 161, 56, 0.2),
-                  borderSide: BorderSide(
-                    width: 2,
-                    color: Theme.of(context).accentColor,
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(
+                        width: 2, color: Theme.of(context).accentColor),
+                    textStyle: TextStyle(color: Theme.of(context).accentColor),
                   ),
-                  child: Text('CONTINUAR'),
+                  child: Text(
+                    'CONTINUAR',
+                    style: TextStyle(
+                      color: Theme.of(context).accentColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
+                      _salvar(context);
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => Dashboard()),

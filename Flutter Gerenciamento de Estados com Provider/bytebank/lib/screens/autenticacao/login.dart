@@ -64,14 +64,19 @@ class Login extends StatelessWidget {
           SizedBox(height: 30),
           SizedBox(
             width: double.infinity,
-            child: OutlineButton(
-              textColor: Theme.of(context).accentColor,
-              highlightColor: Color.fromRGBO(71, 161, 56, 0.2),
-              borderSide: BorderSide(
-                width: 2,
-                color: Theme.of(context).accentColor,
+            child: OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                side:
+                    BorderSide(width: 2, color: Theme.of(context).accentColor),
+                textStyle: TextStyle(color: Theme.of(context).accentColor),
               ),
-              child: Text('CONTINUAR'),
+              child: Text(
+                'CONTINUAR',
+                style: TextStyle(
+                  color: Theme.of(context).accentColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   Navigator.pushAndRemoveUntil(
@@ -91,12 +96,10 @@ class Login extends StatelessWidget {
                 fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 20),
-          OutlineButton(
-            textColor: Theme.of(context).accentColor,
-            highlightColor: Color.fromRGBO(71, 161, 56, 0.2),
-            borderSide: BorderSide(
-              width: 2,
-              color: Theme.of(context).accentColor,
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              side: BorderSide(width: 2, color: Theme.of(context).accentColor),
+              textStyle: TextStyle(color: Theme.of(context).accentColor),
             ),
             child: Text(
               'Criar uma conta >',
@@ -105,10 +108,9 @@ class Login extends StatelessWidget {
                   fontWeight: FontWeight.bold),
             ),
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => RegisterForm()),
-                (route) => false,
               );
             },
           ),
