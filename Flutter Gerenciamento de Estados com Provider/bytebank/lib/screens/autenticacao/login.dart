@@ -1,13 +1,18 @@
 import 'package:brasil_fields/brasil_fields.dart';
+import 'package:bytebank/components/biometria.dart';
+import 'package:bytebank/models/cliente.dart';
 import 'package:bytebank/screens/autenticacao/register_form.dart';
 import 'package:bytebank/screens/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatelessWidget {
   final TextEditingController _cpfController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
   final _formKey = new GlobalKey<FormState>();
+  final _localAuthentication = LocalAuthentication();
 
   Login({Key? key}) : super(key: key);
 
@@ -20,6 +25,29 @@ class Login extends StatelessWidget {
     final passwordRegex = RegExp(
         r'^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,16}$');
     return passwordRegex.hasMatch(password);
+  }
+
+  _checkBiometryAvaliability() async {
+    try {
+      return await _localAuthentication.canCheckBiometrics;
+    } on PlatformException catch (err) {
+      print(err);
+    }
+  }
+
+  Future<void> _authenticateCliente(context) async {
+    bool isAuthenticated = false;
+
+    isAuthenticated = await _localAuthentication.authenticate(
+      localizedReason: 'Autentique-se para continuar',
+      options: AuthenticationOptions(useErrorDialogs: true, stickyAuth: true),
+    );
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => Dashboard()),
+      (Route route) => false,
+    );
   }
 
   Widget _buildForm(BuildContext context) {
@@ -89,13 +117,44 @@ class Login extends StatelessWidget {
             ),
           ),
           SizedBox(height: 15),
-          Text(
-            "Esqueci minha senha >",
-            style: TextStyle(
-                color: Theme.of(context).accentColor,
-                fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 20),
+          FutureBuilder(
+              future: _checkBiometryAvaliability(),
+              builder: (context, snapshot) {
+                if (snapshot.data == true) {
+                  return Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
+                    child: ElevatedButton(
+                      onPressed: () async =>
+                          await _authenticateCliente(context),
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(
+                            width: 2, color: Theme.of(context).accentColor),
+                        textStyle:
+                            TextStyle(color: Theme.of(context).accentColor),
+                        backgroundColor: Colors.white,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            "Login via Biometria",
+                            style: TextStyle(
+                              color: Theme.of(context).accentColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Icon(Icons.fingerprint,
+                              color: Theme.of(context).accentColor),
+                        ],
+                      ),
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              }),
+          SizedBox(height: 15),
           OutlinedButton(
             style: OutlinedButton.styleFrom(
               side: BorderSide(width: 2, color: Theme.of(context).accentColor),
@@ -139,7 +198,7 @@ class Login extends StatelessWidget {
               alignment: Alignment.center,
               child: Container(
                 width: 300,
-                height: 450,
+                height: 500,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12)),

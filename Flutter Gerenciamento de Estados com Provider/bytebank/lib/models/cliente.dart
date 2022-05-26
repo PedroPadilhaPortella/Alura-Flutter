@@ -1,18 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class Cliente extends ChangeNotifier {
-  late String _nome;
-  late String _email;
-  late String _telefone;
-  late String _cpf;
-  late String _dataNascimento;
-  late String _cep;
-  late String _estado;
-  late String _cidade;
-  late String _bairro;
-  late String _logradouro;
-  late String _numero;
-  late String _senha;
+  String _nome = '';
+  String _email = '';
+  String _telefone = '';
+  String _cpf = '';
+  String _dataNascimento = '';
+  String _cep = '';
+  String _estado = '';
+  String _cidade = '';
+  String _bairro = '';
+  String _logradouro = '';
+  String _numero = '';
+  String _senha = '';
 
   String get nome => _nome;
 
@@ -100,11 +102,27 @@ class Cliente extends ChangeNotifier {
 
   // Tela de Cadastro de Cliente
   int _stepAtual = 0;
+  File? _imageRG;
+  bool _biometria = false;
 
   int get stepAtual => _stepAtual;
 
+  File? get imageRG => _imageRG;
+
+  bool get biometria => _biometria;
+
   set stepAtual(int value) {
     _stepAtual = value;
+    notifyListeners();
+  }
+
+  set imageRG(File? value) {
+    _imageRG = value;
+    notifyListeners();
+  }
+
+  set biometria(bool value) {
+    _biometria = value;
     notifyListeners();
   }
 }

@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:brasil_fields/brasil_fields.dart';
+import 'package:bytebank/components/biometria.dart';
 import 'package:flux_validator_dart/flux_validator_dart.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:bytebank/models/cliente.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +34,7 @@ class RegisterForm extends StatelessWidget {
   final _formUserAuth = new GlobalKey<FormState>();
   final TextEditingController _senhaController = TextEditingController();
   final TextEditingController _repitaSenhaController = TextEditingController();
+  final ImagePicker _rgPicker = new ImagePicker();
 
   RegisterForm({Key? key}) : super(key: key);
 
@@ -63,12 +68,38 @@ class RegisterForm extends StatelessWidget {
     return confirmPassword == _senhaController.text;
   }
 
-  _nextStep(BuildContext context) {
+  void _captureRG(Cliente cliente) async {
+    final pickedImage = await _rgPicker.pickImage(source: ImageSource.camera);
+    cliente.imageRG = File(pickedImage!.path);
+  }
+
+  bool _haveYouSentRG(BuildContext context) {
+    return Provider.of<Cliente>(context).imageRG != null ? true : false;
+  }
+
+  Image _showRGImage(BuildContext context) {
+    return Image.file(Provider.of<Cliente>(context).imageRG!);
+  }
+
+  Column _askForTheRG(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(height: 15),
+        Text(
+          'Foto do RG pendente',
+          style: TextStyle(
+              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.red),
+        ),
+      ],
+    );
+  }
+
+  void _nextStep(BuildContext context) {
     Cliente cliente = Provider.of<Cliente>(context, listen: false);
     goTo(cliente.stepAtual + 1, cliente);
   }
 
-  goTo(int step, Cliente cliente) {
+  void goTo(int step, Cliente cliente) {
     cliente.stepAtual = step;
   }
 
@@ -98,10 +129,12 @@ class RegisterForm extends StatelessWidget {
   }
 
   void _saveStep3(BuildContext context) {
-    if (_formUserAuth.currentState!.validate()) {
+    if (_formUserAuth.currentState!.validate() &&
+        Provider.of<Cliente>(context, listen: false).imageRG != null) {
       Cliente cliente = Provider.of<Cliente>(context, listen: false);
       cliente.senha = _senhaController.text;
       FocusScope.of(context).unfocus();
+      cliente.imageRG = null;
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => Dashboard()),
@@ -317,6 +350,20 @@ class RegisterForm extends StatelessWidget {
                 return null;
               },
             ),
+            SizedBox(height: 10),
+            Text(
+              'Para prosseguir com seu cadastro é necessário que tenhamos uma foto do seu RG',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () => _captureRG(cliente),
+              child: Text('Tirar foto do RG'),
+            ),
+            _haveYouSentRG(context)
+                ? _showRGImage(context)
+                : _askForTheRG(context),
+            Biometria(),
           ]),
         ),
       ),

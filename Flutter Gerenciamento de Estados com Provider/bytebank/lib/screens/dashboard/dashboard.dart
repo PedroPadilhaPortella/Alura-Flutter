@@ -36,7 +36,7 @@ class Dashboard extends StatelessWidget {
                 );
               }
               return Text(
-                'Seu seu saldo atual é de',
+                'Seu saldo atual é de',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
               );
             },
