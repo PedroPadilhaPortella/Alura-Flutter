@@ -43,11 +43,21 @@ class Login extends StatelessWidget {
       options: AuthenticationOptions(useErrorDialogs: true, stickyAuth: true),
     );
 
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => Dashboard()),
-      (Route route) => false,
-    );
+    if (isAuthenticated) {
+      Provider.of<Cliente>(context, listen: false).biometria = isAuthenticated;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Dashboard(),
+        ),
+      );
+    }
+
+    // Navigator.pushAndRemoveUntil(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => Dashboard()),
+    //   (Route route) => false,
+    // );
   }
 
   Widget _buildForm(BuildContext context) {
